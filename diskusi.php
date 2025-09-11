@@ -1,5 +1,5 @@
 <?php
-require_once 'db.php';
+require './config/db.php';
 
 // Ambil data topik
 $topics = [];

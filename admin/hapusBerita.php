@@ -6,7 +6,7 @@ if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
 
     try {
-        $stmt = $pdo->prepare("DELETE FROM berita WHERE id = ?");
+        $stmt = $conn->prepare("DELETE FROM berita WHERE id = ?");
         if ($stmt->execute([$id])) {
             $_SESSION['berita_status'] = 'deleted';
         } else {

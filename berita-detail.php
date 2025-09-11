@@ -1,5 +1,5 @@
 <?php
-require 'db.php';
+require './config/db.php';
 
 // Ambil ID dari URL, pastikan valid (angka)
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;

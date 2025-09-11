@@ -1,13 +1,12 @@
 <?php
 session_start();
-require 'config/db.php';
+require '../config/db.php';
 
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
     header("Location: login.php");
     exit();
 }
 
-$koneksi = new mysqli("localhost", "root", "", "showroom");
 
 $query = "
   SELECT r.*, m.nama_mobil 
@@ -15,7 +14,7 @@ $query = "
   JOIN mobil m ON r.mobil_id = m.id_mobil
   ORDER BY r.created_at DESC
 ";
-$result = $koneksi->query($query);
+$result = $conn->query($query);
 ?>
 
 <!DOCTYPE html>

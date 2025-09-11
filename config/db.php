@@ -1,14 +1,12 @@
 <?php
-$host = 'localhost';
-$db   = 'showroom';
-$user = 'root';
-$pass = 'ahmad'; // atau sesuaikan
-$charset = 'utf8mb4';
+$host = "localhost";
+$user = "root";
+$pass = "ahmad";
+$db   = "showroom";
 
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$db;charset=$charset", $user, $pass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Koneksi database gagal: " . $e->getMessage());
+$conn = new mysqli($host, $user, $pass, $db);
+
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
 }
 ?>

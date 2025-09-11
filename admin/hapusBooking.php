@@ -1,5 +1,5 @@
 <?php
-include 'koneksi.php';
+require '../config/db.php';
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 if ($id) {
   $stmt = $conn->prepare("DELETE FROM booking_test_drive WHERE id_booking = ?");

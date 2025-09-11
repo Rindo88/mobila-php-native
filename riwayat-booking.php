@@ -1,5 +1,5 @@
 <?php
-include 'db.php';
+require './config/db.php';
 session_start();
 
 // Cek apakah user sudah login

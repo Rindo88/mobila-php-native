@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'db.php';
+require './config/db.php';
 
 $email = $_SESSION['email'];
 

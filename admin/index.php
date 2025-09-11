@@ -8,6 +8,6 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
 }
 
 // Jika belum login, arahkan ke form login
-header("Location login.php");
+header("Location:login.php");
 exit();
 ?>

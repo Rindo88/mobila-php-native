@@ -1,21 +1,20 @@
 <?php
 session_start();
-require 'config/db.php';
+require '../config/db.php';
 
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
     header("Location: login.php");
     exit();
 }
 
-$koneksi = new mysqli("localhost", "root", "", "showroom");
-if ($koneksi->connect_error) {
-    die("Koneksi gagal: " . $koneksi->connect_error);
+if ($conn->connect_error) {
+    die("conn gagal: " . $conn->connect_error);
 }
 
 $sql = "SELECT * FROM mobil";
-$result = $koneksi->query($sql);
+$result = $conn->query($sql);
 if (!$result) {
-    die("Query error: " . $koneksi->error);
+    die("Query error: " . $conn->error);
 }
 ?>
 

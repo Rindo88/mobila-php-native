@@ -1,6 +1,6 @@
 <?php
 // hapusMobil.php
-include '../koneksi.php';
+require '../config/db.php';
 
 // Ambil dan sanitasi ID mobil
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
