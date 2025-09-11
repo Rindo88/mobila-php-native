@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'config/db.php';
+include '../config/db.php';
 
 // Cek login
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {

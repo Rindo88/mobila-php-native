@@ -1,4 +1,4 @@
-<?php include 'db.php'; ?>
+<?php include './config/db.php'; ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -564,7 +564,6 @@
 
     <!-- berita -->
     <?php
-    require 'koneksi.php';
     $result = mysqli_query($conn, "SELECT * FROM berita WHERE status = 'publikasi'");
     ?>
 
@@ -690,7 +689,7 @@
       </div>
 
       <div class="footer-bottom">
-        <p>Di Buat Oleh Kelompok 8</p>
+        <p>Di Buat Oleh Kelompok 5</p>
       </div>
     </footer>
     <!-- Footer End -->

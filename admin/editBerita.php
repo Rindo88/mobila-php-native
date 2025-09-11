@@ -5,9 +5,7 @@ require '../config/db.php';
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 // Ambil data berita
-$stmt = $pdo->prepare("SELECT * FROM berita WHERE id = ?");
-$stmt->execute([$id]);
-$data = $stmt->fetch(PDO::FETCH_ASSOC);
+$data = mysqli_query($conn,"SELECT * FROM berita WHERE id = $id")->fetch_assoc();
 
 // Jika tidak ada data
 if (!$data) {
@@ -32,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Update data termasuk status
-    $stmt = $pdo->prepare("UPDATE berita SET judul = ?, isi = ?, gambar = ?, tanggal_publikasi = ?, penulis = ?, status = ? WHERE id = ?");
+    $stmt = $conn->prepare("UPDATE berita SET judul = ?, isi = ?, gambar = ?, tanggal_publikasi = ?, penulis = ?, status = ? WHERE id = ?");
     $stmt->execute([$judul, $isi, $gambar, $tanggal, $penulis, $status, $id]);
 
     $_SESSION['berita_status'] = 'updated';

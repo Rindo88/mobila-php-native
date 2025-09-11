@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'config/db.php';
+require '../config/db.php';
 
 // Jika sudah login, arahkan ke dashboard
 if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'db.php';
+require './config/db.php';
 
 // Cek login
 $is_logged_in = isset($_SESSION['user_id']);

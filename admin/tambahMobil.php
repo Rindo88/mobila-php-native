@@ -7,11 +7,11 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     exit;
 }
 
-$koneksi = new mysqli('localhost', 'root', '', 'showroom');
-if ($koneksi->connect_error) die('Koneksi gagal: '.$koneksi->connect_error);
 
-$merek_result    = $koneksi->query("SELECT id_merek, nama_merek FROM merek");
-$kategori_result = $koneksi->query("SELECT id_kategori, nama_kategori FROM kategori");
+if ($conn->connect_error) die('Koneksi gagal: '.$conn->connect_error);
+
+$merek_result    = $conn->query("SELECT id_merek, nama_merek FROM merek");
+$kategori_result = $conn->query("SELECT id_kategori, nama_kategori FROM kategori");
 
 /* ===========================  PROSES SUBMIT  =========================== */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -38,10 +38,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ]);
 
     /* --- Validasi jumlah gambar --- */
-    $totalGambar = count($_FILES['gambar']['name']);
-    if ($totalGambar < 5) {
-        die('Minimal upload 5 gambar.');
-    }
+    
+    // $totalGambar = count($_FILES['gambar']['name']);
+    // if ($totalGambar < 5) {
+    //     die('Minimal upload 5 gambar.');
+    // }
 
     /* --- Folder upload (⟶ satu level di atas /admin) --- */
     $webUploadDir  = 'uploads/';                          // dipakai di HTML / DB
@@ -52,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     /* =================  INSERT DATA MOBIL  (tanpa kolom gambar)  ================= */
-    $stmt = $koneksi->prepare("
+    $stmt = $conn->prepare("
         INSERT INTO mobil
         (nama_mobil, id_merek, id_kategori, harga,
          spesifikasi, video_url, bahan_bakar, transmisi,
@@ -82,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $targetPath = $diskUploadDir.$fileName; // path fisik
 
         if (move_uploaded_file($_FILES['gambar']['tmp_name'][$i], $targetPath)) {
-            $stmtImg = $koneksi->prepare("
+            $stmtImg = $conn->prepare("
                 INSERT INTO gambar_mobil (id_mobil, gambar)
                 VALUES (?, ?)
             ");

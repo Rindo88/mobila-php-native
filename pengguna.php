@@ -1,18 +1,16 @@
 <?php
 session_start();
+require './config/db.php';
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
 }
-?>
-<?php
 
-include 'db.php';
+
 // Ambil brand dari URL, default 'all'
 $brand_filter = isset($_GET['brand']) ? strtolower($_GET['brand']) : 'all';
 ?>
 
-<?php include 'db.php'; ?>
 
 <!DOCTYPE html>
 <html lang="en">

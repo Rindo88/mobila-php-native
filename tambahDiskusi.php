@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'db.php'; // pastikan koneksi ke database
+require './config/db.php'; // pastikan koneksi ke database
 
 // Ambil data dari form
 $id_mobil   = intval($_POST['id_mobil']);

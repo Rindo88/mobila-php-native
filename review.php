@@ -1,6 +1,6 @@
 <?php
-include 'db.php';
 session_start();
+require './config/db.php';
 ?>
 <!DOCTYPE html>
 <html lang="id">
