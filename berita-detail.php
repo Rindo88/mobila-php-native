@@ -15,7 +15,7 @@ if (!$result || mysqli_num_rows($result) == 0) {
 $data = mysqli_fetch_assoc($result);
 ?>
 
-<!DOCTYPE html>
+<!DOCTYPE html>   
 <html lang="id">
 <head>
   <meta charset="UTF-8">
