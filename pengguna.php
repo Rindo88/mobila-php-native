@@ -17,7 +17,7 @@ $brand_filter = isset($_GET['brand']) ? strtolower($_GET['brand']) : 'all';
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ShowCar</title>
+    <title>Mobila</title>
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
@@ -211,6 +211,13 @@ $brand_filter = isset($_GET['brand']) ? strtolower($_GET['brand']) : 'all';
     color: #dc3545;
   }
 
+  .navbar-brand-logo {
+  height: 40px;        /* atur tinggi logo sesuai selera, misal 32–50px */
+  width: auto;         /* biar proporsional */
+  object-fit: contain; /* supaya tidak terdistorsi */
+}
+
+
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
@@ -222,12 +229,19 @@ $brand_filter = isset($_GET['brand']) ? strtolower($_GET['brand']) : 'all';
     <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3 fixed-top">
   <div class="container">
-    <a class="navbar-brand font-weight-bold text-danger" href="#">ShowCar</a>
 
+    <!-- Logo + Nama Brand -->
+    <a class="navbar-brand d-flex align-items-center" href="#">
+      <img src="./assets/img/logo.png" alt="Logo" class="navbar-brand-logo me-2">
+      <span class="fw-bold text-danger">Mobila</span>
+    </a>
+
+    <!-- Toggler -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
 
+    <!-- Menu -->
     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
       <ul class="navbar-nav align-items-lg-center">
         <li class="nav-item mx-2">
@@ -242,85 +256,68 @@ $brand_filter = isset($_GET['brand']) ? strtolower($_GET['brand']) : 'all';
         <li class="nav-item mx-2">
           <a class="nav-link" href="#faqs">Faqs</a>
         </li>
-        <?php
 
+        <?php
           $email_user = $_SESSION['email'];
           $query = "SELECT COUNT(*) AS jumlah 
-          FROM booking_test_drive 
-          WHERE email = '$email_user' 
-          AND status IN ('Disetujui', 'Ditolak') 
-          AND dibaca_user = 0";
-
+                    FROM booking_test_drive 
+                    WHERE email = '$email_user' 
+                      AND status IN ('Disetujui', 'Ditolak') 
+                      AND dibaca_user = 0";
           $result = mysqli_query($conn, $query);
           $data = mysqli_fetch_assoc($result);
           $jumlah_notif = $data['jumlah'];
-          ?>
+        ?>
 
-          <!-- Navbar Notifikasi -->
-          <li class="nav-item dropdown mx-2">
-            <a class="nav-link position-relative" href="riwayat-booking.php">
-              <i class="bi bi-bell fs-5"></i>
-              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notif-count">
-                <?= $jumlah_notif ?>
-                <span class="visually-hidden">unread messages</span>
-              </span>
-            </a>
-          </li>
+        <!-- Notifikasi -->
+        <li class="nav-item dropdown mx-2">
+          <a class="nav-link position-relative" href="riwayat-booking.php">
+            <i class="bi bi-bell fs-5"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notif-count">
+              <?= $jumlah_notif ?>
+              <span class="visually-hidden">unread messages</span>
+            </span>
+          </a>
+        </li>
+      </ul>
 
       <!-- User Dropdown -->
-<div class="dropdown ms-3">
-  <a class="btn bg-white text-dark border-0 dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown">
-    <i class="bi bi-person-circle fs-5"></i>
-    <?= $_SESSION['username'] ?? 'Akun' ?>
-  </a>
-  <ul class="dropdown-menu dropdown-menu-end">
-    <li><a class="dropdown-item" href="riwayat-booking.php">Riwayat</a></li>
-    <li><a class="dropdown-item" href="#" id="btn-logout">Logout</a></li>
-  </ul>
-</div>
+      <div class="dropdown ms-3">
+        <a class="btn bg-white text-dark border-0 dropdown-toggle d-flex align-items-center gap-2"
+           href="#" role="button" data-bs-toggle="dropdown">
+          <i class="bi bi-person-circle fs-5"></i>
+          <?= $_SESSION['username'] ?? 'Akun' ?>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><a class="dropdown-item" href="riwayat-booking.php">Riwayat</a></li>
+          <li><a class="dropdown-item" href="#" id="btn-logout">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
 
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-  document.getElementById("btn-logout").addEventListener("click", function(e) {
-    e.preventDefault();
-    Swal.fire({
-      title: "Yakin ingin logout?",
-      text: "Sesi Anda akan diakhiri.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Ya, logout"
-    }).then((result) => {
-      if (result.isConfirmed) {
-        window.location.href = "logout.php";
-      }
-    });
+document.getElementById("btn-logout").addEventListener("click", function(e) {
+  e.preventDefault();
+  Swal.fire({
+    title: "Yakin ingin logout?",
+    text: "Sesi Anda akan diakhiri.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Ya, logout"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      window.location.href = "logout.php";
+    }
   });
+});
+</script>
 
-
-        document.getElementById("btn-logout").addEventListener("click", function(e) {
-          e.preventDefault();
-          Swal.fire({
-            title: "Yakin ingin logout?",
-            text: "Sesi Anda akan diakhiri.",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Ya, logout"
-          }).then((result) => {
-            if (result.isConfirmed) {
-              window.location.href = "logout.php";
-            }
-          });
-        });
-      </script>
-
-    </div>
-  </div>
-</nav>
     <!-- akhiran navbar -->
 
     <!-- Hero Section sebagai background gambar dengan teks minimal -->
@@ -632,7 +629,7 @@ $brand_filter = isset($_GET['brand']) ? strtolower($_GET['brand']) : 'all';
 
      <!-- berita -->
 <?php
-require 'koneksi.php';
+require './config/db.php';
 $result = mysqli_query($conn, "SELECT * FROM berita WHERE status = 'publikasi'");
 ?>
 
@@ -745,7 +742,7 @@ $result = mysqli_query($conn, "SELECT * FROM berita WHERE status = 'publikasi'")
         <div class="container footer-flex">
           <!-- Left: Logo, Description, Social -->
           <div class="footer-left">
-            <h2 class="footer-logo">ShowCar</h2>
+            <h2 class="footer-logo">Mobila</h2>
             <p class="footer-description">Hubungi Juga kami di sosial Media</p>
             <div class="footer-right">
               <a href="#"><i class="fab fa-facebook-f"></i></a>
