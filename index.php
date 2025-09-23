@@ -323,7 +323,6 @@ $faqs = [
     </div>
     <div class="text-center text-gray-500 mt-8 text-sm">
       &copy; <?= date('Y') ?> Mobila. Dibuat dengan ❤️ oleh Kelompok 5
-    </div>
   </footer>
 
   <!-- FontAwesome CDN for icons -->
