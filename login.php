@@ -73,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     .btn-login {
-      background-color: #ff0000;
+      background-color: #007bff;
       color: white;
       font-weight: bold;
       font-size: 18px;
@@ -84,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     .btn-login:hover {
-      background-color: #cc0000;
+      background-color: blue;
     }
 
     .small-link {
@@ -96,10 +96,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <div class="d-flex justify-content-center align-items-center vh-100">
     <div class="login-container">
       <div class="logo mb-3">
-        <span style="color:red;font-weight:bold;">So</span><span style="color:black;font-weight:bold;">Car</span> 🚗
+        <span style="color:red;font-weight:bold;">MO</span><span style="color:black;font-weight:bold;">BILA</span> 
       </div>
-      <h2 class="mb-2">Login ke SOCA</h2>
-      <p class="small-link mb-4">Belum punya Akun SOCA? <a href="register.php" class="text-danger">Daftar</a></p>
+      <h2 class="mb-2">Login ke Mobila</h2>
+      <p class="small-link mb-4">Belum punya Akun MOBILA? <a href="register.php" class="text-danger">Daftar</a></p>
 
       <?php if (!empty($message)): ?>
         <div class="alert alert-danger"><?= $message ?></div>

@@ -57,14 +57,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       box-shadow: 0 0 20px rgba(0,0,0,0.1);
     }
     .btn-daftar {
-      background-color: #ff0000;
+      background-color: #007bff;
       color: white;
       font-weight: bold;
       font-size: 18px;
       border-radius: 8px;
     }
     .btn-daftar:hover {
-      background-color: #cc0000;
+      background-color: blue;
     }
     .form-control:focus {
       border-color: #007bff;
@@ -75,9 +75,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
   <div class="d-flex justify-content-center align-items-center vh-100">
     <div class="register-box text-center">
-      <h3 class="mb-1"><span style="color: red;">So</span><span style="color: black;">Car 🚗</span></h3>
+      <h3 class="mb-1"><span style="color: red;">Mo</span><span style="color: black;">Bila</span></h3>
       <h4 class="fw-bold mb-2">Daftar Sekarang</h4>
-      <p class="mb-4">Sudah punya Akun SOCA? <a href="login.php" class="text-danger fw-semibold">Masuk</a></p>
+      <p class="mb-4">Sudah punya Akun MOBILA? <a href="login.php" class="text-danger fw-semibold">Masuk</a></p>
 
       <!-- Pesan dari PHP -->
       <?php if ($message): ?>
