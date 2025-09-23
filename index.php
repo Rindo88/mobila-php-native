@@ -65,12 +65,24 @@ $faqs = [
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
+<style>
+  .navbar-brand-logo {
+  height: 40px;        /* atur tinggi logo sesuai selera, misal 32–50px */
+  width: auto;         /* biar proporsional */
+  object-fit: contain; /* supaya tidak terdistorsi */
+}
+
+</style>
 <body class="bg-gray-50 text-gray-900 font-sans">
 
   <!-- NAVBAR -->
   <nav class="fixed top-0 w-full bg-white shadow-md z-50 transition-colors duration-300" id="navbar">
     <div class="container mx-auto px-4 flex items-center justify-between h-16">
-      <a href="#" class="text-2xl font-extrabold text-red-600">Mobila</a>
+    <a href="#" class="flex items-center gap-2 text-2xl font-extrabold text-red-600">
+  <img src="./assets/img/logomobila.png" alt="Logo" class="h-10 w-auto object-contain">
+  Mobila
+</a>
+
       <div class="hidden md:flex space-x-6 items-center">
       <a href="#shop" class="text-sky-500 hover:text-sky-700 transition">Mobil Baru</a>
       <a href="#ulasan" class="text-sky-500 hover:text-sky-700 transition">Ulasan</a>

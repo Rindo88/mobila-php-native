@@ -232,7 +232,7 @@ $brand_filter = isset($_GET['brand']) ? strtolower($_GET['brand']) : 'all';
 
     <!-- Logo + Nama Brand -->
     <a class="navbar-brand d-flex align-items-center" href="#">
-      <img src="./assets/img/logo.png" alt="Logo" class="navbar-brand-logo me-2">
+      <img src="./assets/img/logomobila.png" alt="Logo" class="navbar-brand-logo me-2">
       <span class="fw-bold text-danger">Mobila</span>
     </a>
 
