@@ -6,13 +6,27 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
+  $email_user = $_SESSION['email'];
+  
+  // Gunakan prepared statement untuk keamanan
+  $stmt_notif = mysqli_prepare($conn, "SELECT COUNT(*) AS jumlah 
+                                        FROM booking_test_drive 
+                                        WHERE email = ? 
+                                          AND status IN ('Disetujui', 'Ditolak') 
+                                          AND dibaca_user = 0");
+  mysqli_stmt_bind_param($stmt_notif, "s", $email_user);
+  mysqli_stmt_execute($stmt_notif);
+  $result_notif = mysqli_stmt_get_result($stmt_notif);
+  $data_notif = mysqli_fetch_assoc($result_notif);
+  $jumlah_notif = $data_notif['jumlah'] ?? 0;
+  mysqli_stmt_close($stmt_notif);
 
 // Ambil brand dari URL, default 'all'
 $brand_filter = isset($_GET['brand']) ? strtolower($_GET['brand']) : 'all';
 ?>
 
 
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
   <head>
     <meta charset="UTF-8" />

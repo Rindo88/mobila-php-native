@@ -2,44 +2,63 @@
 session_start();
 require './config/db.php';
 
-if (!isset($_GET['id'])) {
+// Validasi input
+if (!isset($_GET['id']) || empty($_GET['id'])) {
     header('Location: index.php');
     exit;
 }
 
-$id = intval($_GET['id']);
+ $id = intval($_GET['id']);
 
-$query = "
+// Menggunakan prepared statement untuk keamanan
+ $stmt = $conn->prepare("
     SELECT m.*, mr.nama_merek, k.nama_kategori
     FROM mobil m
     JOIN merek mr ON m.id_merek = mr.id_merek
     JOIN kategori k ON m.id_kategori = k.id_kategori
-    WHERE m.id_mobil = $id
-";
-$result = $conn->query($query);
+    WHERE m.id_mobil = ?
+");
+ $stmt->bind_param("i", $id);
+ $stmt->execute();
+ $result = $stmt->get_result();
 
 if ($result->num_rows == 0) {
-    echo "Mobil tidak ditemukan.";
+    echo "<div class='alert alert-danger'>Mobil tidak ditemukan.</div>";
     exit;
 }
 
-$data = $result->fetch_assoc();
+ $data = $result->fetch_assoc();
 
-$gambarList = [];
-$q = $conn->query("SELECT gambar FROM gambar_mobil WHERE id_mobil = $id");
-while ($row = $q->fetch_assoc()) {
-    $gambarList[] = 'uploads/' . $row['gambar'];
+// Ambil gambar mobil dengan prepared statement
+ $gambarList = [];
+ $stmt_gambar = $conn->prepare("SELECT gambar FROM gambar_mobil WHERE id_mobil = ?");
+ $stmt_gambar->bind_param("i", $id);
+ $stmt_gambar->execute();
+ $gambar_result = $stmt_gambar->get_result();
+
+while ($row = $gambar_result->fetch_assoc()) {
+    $gambarList[] = 'uploads/' . htmlspecialchars($row['gambar']);
+}
+
+// Jika tidak ada gambar, tambahkan gambar default
+if (empty($gambarList)) {
+    $gambarList[] = 'assets/images/default-car.jpg';
 }
 ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title><?= htmlspecialchars($data['nama_mobil']) ?></title>
-  <link rel="stylesheet" href=".assets/css/detail-mobil.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><?= htmlspecialchars($data['nama_mobil']) ?> - Detail Mobil</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-TODO" crossorigin="anonymous"> -->
-
+  
+  <!-- Custom CSS -->
   <style>
     .image-slider { position: relative; width: 100%; max-width: 600px; margin: 20px auto; overflow: hidden; border-radius: 8px; background-color: #f9f9f9; }
     .slides { display: flex; transition: transform 0.4s ease-in-out; width: calc(100% * <?= max(1, count($gambarList)) ?>); }
@@ -51,228 +70,510 @@ while ($row = $q->fetch_assoc()) {
       border-bottom: 2px solid #0288D1;
       color: #0288D1;
     }
+    .main-image-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: 0.5rem;
+    }
+    .nav-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      transition: background-color 0.3s;
+    }
+    .nav-button:hover {
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+    .prev-button {
+      left: 10px;
+    }
+    .next-button {
+      right: 10px;
+    }
+    .image-counter {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .thumbnail-container {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      overflow-x: auto;
+      padding-bottom: 5px;
+    }
+    .thumbnail {
+      min-width: 80px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 4px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color 0.3s;
+    }
+    .thumbnail.active {
+      border-color: #0288D1;
+    }
+    .spec-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .spec-label {
+      color: #666;
+      font-weight: 500;
+    }
+    .spec-value {
+      font-weight: 600;
+    }
+    .review-card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .star-rating {
+      color: #f59e0b;
+    }
+    .discussion-card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .reply-card {
+      margin-left: 24px;
+      border-left: 3px solid #e5e7eb;
+      padding-left: 16px;
+      background: #f9fafb;
+    }
   </style>
 </head>
-<body>
-  <div class="container-detail" style="display: flex; flex-wrap: wrap; gap: 40px; max-width: 1200px; margin: 40px auto;">
-    <!-- Gambar dan Slider -->
-    <div class="image-section" style="flex: 1 1 100%; position: relative;">
-      <div class="main-image" style="position: relative;">
-        <img id="mainDisplay" src="<?= htmlspecialchars($gambarList[0] ?? 'placeholder.jpg') ?>" style="width: 100%; border-radius: 8px; object-fit: cover; max-height: 500px;" />
-        <button onclick="prevImage()" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); background: rgba(0,0,0,0.5); border: none; color: white; padding: 10px; border-radius: 50%;">❮</button>
-        <button onclick="nextImage()" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); background: rgba(0,0,0,0.5); border: none; color: white; padding: 10px; border-radius: 50%;">❯</button>
-        <div id="imageCounter" style="position: absolute; bottom: 10px; right: 20px; background: rgba(0,0,0,0.6); color: white; padding: 5px 10px; border-radius: 5px;">
-          1 / <?= count($gambarList) ?>
-        </div>
-      </div>
-      <div class="thumbnail-container" style="display: flex; gap: 10px; margin-top: 10px; overflow-x: auto;">
-        <?php foreach ($gambarList as $index => $img): ?>
-          <img src="<?= htmlspecialchars($img) ?>" onclick="goToImage(<?= $index ?>)" style="width: 80px; height: 60px; object-fit: cover; border-radius: 4px; cursor: pointer;" />
-        <?php endforeach; ?>
+<body class="bg-gray-50">
+  <!-- Header -->
+  <header class="bg-white shadow-sm">
+    <div class="container mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="index.php" class="text-xl font-bold text-blue-600">MobilKu</a>
+        <nav>
+          <ul class="flex space-x-6">
+            <li><a href="index.php" class="text-gray-700 hover:text-blue-600">Beranda</a></li>
+            <li><a href="#" class="text-gray-700 hover:text-blue-600">Mobil</a></li>
+            <li><a href="#" class="text-gray-700 hover:text-blue-600">Promo</a></li>
+            <li><a href="#" class="text-gray-700 hover:text-blue-600">Tentang</a></li>
+            <?php if (isset($_SESSION['email'])): ?>
+              <li><a href="profile.php" class="text-gray-700 hover:text-blue-600">Profil</a></li>
+              <li><a href="logout.php" class="text-gray-700 hover:text-blue-600">Logout</a></li>
+            <?php else: ?>
+              <li><a href="login.php" class="text-gray-700 hover:text-blue-600">Login</a></li>
+            <?php endif; ?>
+          </ul>
+        </nav>
       </div>
     </div>
+  </header>
 
-    <!-- Informasi Mobil & Tombol Booking -->
-    <div class="flex flex-col gap-5 flex-1 basis-2/5">
-      <h1 class="text-2xl font-bold m-0"><?= htmlspecialchars($data['nama_mobil']) ?></h1>
-      <div class="text-lg text-gray-600">
-        <span class="font-semibold">Harga:</span> Rp <?= number_format($data['harga'], 0, ',', '.') ?>
+  <!-- Main Content -->
+  <main class="container mx-auto px-4 py-8">
+    <div class="flex flex-col lg:flex-row gap-8">
+      <!-- Gambar dan Slider -->
+      <div class="lg:w-1/2">
+        <div class="main-image-container">
+          <img id="mainDisplay" src="<?= htmlspecialchars($gambarList[0]) ?>" class="w-full h-auto object-cover" alt="<?= htmlspecialchars($data['nama_mobil']) ?>" />
+          <button onclick="prevImage()" class="nav-button prev-button">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button onclick="nextImage()" class="nav-button next-button">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+          <div id="imageCounter" class="image-counter">
+            1 / <?= count($gambarList) ?>
+          </div>
+        </div>
+        <div class="thumbnail-container">
+          <?php foreach ($gambarList as $index => $img): ?>
+            <img src="<?= htmlspecialchars($img) ?>" onclick="goToImage(<?= $index ?>)" class="thumbnail <?= $index === 0 ? 'active' : '' ?>" alt="Gambar <?= $index + 1 ?>" />
+          <?php endforeach; ?>
+        </div>
       </div>
-      <div>
-        <?php if (isset($_SESSION['email'])): ?>
-         <a href="booking.php?id=<?= htmlspecialchars($data['id_mobil']) ?>" class="inline-block px-5 py-2 bg-red-600 text-white rounded-md font-semibold hover:bg-red-700 transition">Booking</a>
-        <?php else: ?>
-        <a href="login.php" class="inline-block px-5 py-2 bg-black text-white rounded-md font-semibold hover:bg-gray-800 transition">
-          Login untuk Booking
-        </a>
-        <?php endif; ?>
+
+      <!-- Informasi Mobil & Tombol Booking -->
+      <div class="lg:w-1/2">
+        <div class="bg-white rounded-lg shadow-sm p-6">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded"><?= htmlspecialchars($data['nama_merek']) ?></span>
+            <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded"><?= htmlspecialchars($data['nama_kategori']) ?></span>
+          </div>
+          
+          <h1 class="text-2xl font-bold text-gray-900 mb-4"><?= htmlspecialchars($data['nama_mobil']) ?></h1>
+          
+          <div class="mb-6">
+            <div class="flex items-baseline">
+              <span class="text-3xl font-bold text-gray-900">Rp <?= number_format($data['harga'], 0, ',', '.') ?></span>
+              <span class="text-gray-500 ml-2">Harga mulai</span>
+            </div>
+          </div>
+          
+          <div class="mb-6">
+            <p class="text-gray-700"><?= nl2br(htmlspecialchars($data['deskripsi'])) ?></p>
+          </div>
+          
+          <div class="flex flex-wrap gap-3 mb-6">
+            <div class="flex items-center text-gray-600">
+              <i class="fas fa-cog mr-2"></i>
+              <span><?= htmlspecialchars($data['transmisi']) ?></span>
+            </div>
+            <div class="flex items-center text-gray-600">
+              <i class="fas fa-gas-pump mr-2"></i>
+              <span><?= htmlspecialchars($data['bahan_bakar']) ?></span>
+            </div>
+            <div class="flex items-center text-gray-600">
+              <i class="fas fa-users mr-2"></i>
+              <span><?= htmlspecialchars($data['kapasitas_tempat_duduk']) ?></span>
+            </div>
+          </div>
+          
+          <div class="flex flex-col sm:flex-row gap-3">
+            <?php if (isset($_SESSION['email'])): ?>
+              <a href="booking.php?id=<?= htmlspecialchars($data['id_mobil']) ?>" class="px-6 py-3 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition text-center">
+                <i class="fas fa-calendar-check mr-2"></i> Booking Test Drive
+              </a>
+            <?php else: ?>
+              <a href="login.php?redirect=<?= urlencode('detail-mobil.php?id=' . $data['id_mobil']) ?>" class="px-6 py-3 bg-gray-800 text-white font-medium rounded-lg hover:bg-gray-900 transition text-center">
+                <i class="fas fa-sign-in-alt mr-2"></i> Login untuk Booking
+              </a>
+            <?php endif; ?>
+            <a href="#" class="px-6 py-3 bg-white text-gray-800 font-medium rounded-lg border border-gray-300 hover:bg-gray-50 transition text-center">
+              <i class="fas fa-heart mr-2"></i> Simpan
+            </a>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- Tab Navigasi & Konten -->
-    <div style="flex: 1 1 100%; margin-top: 30px;">
-      <div id="tabs" style="display: flex; gap: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; cursor: pointer;">
-        <div class="tab-item active" data-tab="spec" style="padding: 10px; font-weight: bold;">Spesifikasi</div>
-        <div class="tab-item" data-tab="video" style="padding: 10px; font-weight: bold;">Video</div>
-        <div class="tab-item" data-tab="review" style="padding: 10px; font-weight: bold;">Review</div>
-        <div class="tab-item" data-tab="diskusi" style="padding: 10px; font-weight: bold;">Diskusi</div>
+    <div class="mt-12 bg-white rounded-lg shadow-sm overflow-hidden">
+      <div class="border-b border-gray-200">
+        <nav class="flex -mb-px">
+          <button class="tab-item py-4 px-6 text-center border-b-2 border-blue-500 font-medium text-blue-600" data-tab="spec">
+            Spesifikasi
+          </button>
+          <button class="tab-item py-4 px-6 text-center border-b-2 border-transparent font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="video">
+            Video
+          </button>
+          <button class="tab-item py-4 px-6 text-center border-b-2 border-transparent font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="review">
+            Review
+          </button>
+          <button class="tab-item py-4 px-6 text-center border-b-2 border-transparent font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="diskusi">
+            Diskusi
+          </button>
+        </nav>
       </div>  
 
-      <div id="tab-contents" style="margin-top: 20px;">
-
-         <!-- Tab Spesifikasi -->
-        <div class="tab-content" id="tab-spec" style="display: block;">
-          <div class="bg-white shadow-md rounded-lg p-6 w-full max-w-2xl mx-auto">
-            <h2 class="text-xl font-semibold mb-4">Spesifikasi Utama <?= htmlspecialchars($data['nama_mobil']) ?></h2>
-            
-            <div class="divide-y divide-gray-200">
-              <div class="flex justify-between py-3">
-                <span class="text-gray-600">Jenis Transmisi</span>
-                <span class="font-medium"><?= htmlspecialchars($data['transmisi']) ?></span>
-              </div>
-              <div class="flex justify-between py-3">
-                <span class="text-gray-600">Jenis Bahan Bakar</span>
-                <span class="font-medium"><?= htmlspecialchars($data['bahan_bakar']) ?></span>
-              </div>
-              <div class="flex justify-between py-3">
-                <span class="text-gray-600">Kapasitas Mesin</span>
-                <span class="font-medium"><?= htmlspecialchars($data['kapasitas_mesin']) ?></span>
-              </div>
-              <div class="flex justify-between py-3">
-                <span class="text-gray-600">Tenaga</span>
-                <span class="font-medium"><?= htmlspecialchars($data['tenaga']) ?></span>
-              </div>
-              <div class="flex justify-between py-3">
-                <span class="text-gray-600">Kapasitas Tempat Duduk</span>
-                <span class="font-medium"><?= htmlspecialchars($data['kapasitas_tempat_duduk']) ?></span>
-              </div>
+      <div class="p-6">
+        <!-- Tab Spesifikasi -->
+        <div class="tab-content" id="tab-spec">
+          <h2 class="text-xl font-bold mb-4">Spesifikasi <?= htmlspecialchars($data['nama_mobil']) ?></h2>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="spec-row">
+              <span class="spec-label">Jenis Transmisi</span>
+              <span class="spec-value"><?= htmlspecialchars($data['transmisi']) ?></span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Jenis Bahan Bakar</span>
+              <span class="spec-value"><?= htmlspecialchars($data['bahan_bakar']) ?></span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Kapasitas Mesin</span>
+              <span class="spec-value"><?= htmlspecialchars($data['kapasitas_mesin']) ?></span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Tenaga</span>
+              <span class="spec-value"><?= htmlspecialchars($data['tenaga']) ?></span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Kapasitas Tempat Duduk</span>
+              <span class="spec-value"><?= htmlspecialchars($data['kapasitas_tempat_duduk']) ?></span>
             </div>
           </div>
         </div>
 
-
         <!-- Tab Video -->
-        <div class="tab-content" id="tab-video" style="display: none;">
+        <div class="tab-content hidden" id="tab-video">
+          <h2 class="text-xl font-bold mb-4">Video <?= htmlspecialchars($data['nama_mobil']) ?></h2>
+          
           <?php if (!empty($data['video_url'])): ?>
-            <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-              <iframe src="<?= htmlspecialchars($data['video_url']) ?>" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+            <div class="aspect-w-16 aspect-h-9">
+              <iframe src="<?= htmlspecialchars($data['video_url']) ?>" frameborder="0" allowfullscreen class="w-full h-96 rounded-lg"></iframe>
             </div>
           <?php else: ?>
-            <p>Video belum tersedia.</p>
+            <div class="bg-gray-100 rounded-lg p-8 text-center">
+              <i class="fas fa-video text-gray-400 text-4xl mb-3"></i>
+              <p class="text-gray-600">Video belum tersedia untuk mobil ini.</p>
+            </div>
           <?php endif; ?>
         </div>
 
-        <!-- Tab review -->
-        <div class="tab-content" id="tab-review" style="display: none;">
+        <!-- Tab Review -->
+        <div class="tab-content hidden" id="tab-review">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-bold">Review <?= htmlspecialchars($data['nama_mobil']) ?></h2>
+            <a href="tambahReview.php?mobil_id=<?= $id ?>" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+              <i class="fas fa-pen mr-2"></i> Tulis Review
+            </a>
+          </div>
+          
           <?php
-          $stmt = $conn->prepare("SELECT * FROM review WHERE mobil_id = ? ORDER BY created_at DESC");
-          $stmt->bind_param("i", $id);
-          $stmt->execute();
-          $reviews = $stmt->get_result();
+          $stmt_review = $conn->prepare("SELECT * FROM review WHERE mobil_id = ? ORDER BY created_at DESC");
+          $stmt_review->bind_param("i", $id);
+          $stmt_review->execute();
+          $reviews = $stmt_review->get_result();
 
           if ($reviews->num_rows > 0):
             while ($rev = $reviews->fetch_assoc()): 
               $rating = floatval($rev['rating']);
           ?>
-            <div class="bg-white border shadow-md p-6 rounded-lg mb-6">
-              <!-- Judul Review -->
+            <div class="review-card">
               <?php if (!empty($rev['judul'])): ?>
-                <p class="text-2xl font-bold text-black mb-2"><?= htmlspecialchars($rev['judul']) ?></p>
+                <h3 class="text-lg font-bold mb-2"><?= htmlspecialchars($rev['judul']) ?></h3>
               <?php endif; ?>
 
-              <!-- Rating Bintang dan Skor -->
-              <div class="flex items-center mb-2">
-                <?php
-                for ($i = 1; $i <= 5; $i++) {
-                  if ($rating >= $i) {
-                    echo '<i class="fa-solid fa-star text-orange-500 text-xl mr-1"></i>';
-                  } elseif ($rating >= ($i - 0.5)) {
-                    echo '<i class="fa-solid fa-star-half-stroke text-orange-500 text-xl mr-1"></i>';
-                  } else {
-                    echo '<i class="fa-regular fa-star text-gray-300 text-xl mr-1"></i>';
+              <div class="flex items-center mb-3">
+                <div class="star-rating">
+                  <?php
+                  for ($i = 1; $i <= 5; $i++) {
+                    if ($rating >= $i) {
+                      echo '<i class="fas fa-star"></i>';
+                    } elseif ($rating >= ($i - 0.5)) {
+                      echo '<i class="fas fa-star-half-alt"></i>';
+                    } else {
+                      echo '<i class="far fa-star"></i>';
+                    }
                   }
-                }
-                ?>
-                <span class="ml-2 text-lg font-semibold"><?= number_format($rating, 1) ?>/5</span>
-                <!-- <span class="ml-3 font-medium text-gray-600">Istimewa</span> -->
+                  ?>
+                </div>
+                <span class="ml-2 font-medium"><?= number_format($rating, 1) ?>/5</span>
               </div>
 
-              <!-- Isi Komentar -->
-              <p class="text-gray-800 leading-relaxed mb-4"><?= nl2br(htmlspecialchars($rev['komentar'])) ?></p>
+              <p class="text-gray-700 mb-4"><?= nl2br(htmlspecialchars($rev['komentar'])) ?></p>
 
-              <!-- Reviewer dan Tanggal -->
-              <div class="flex items-center space-x-3">
-                <!-- Avatar bulat dengan inisial -->
-                <div class="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center font-bold">
-                  <?= strtoupper($rev['nama'][0]) ?>
+              <div class="flex items-center">
+                <div class="w-10 h-10 rounded-full bg-red-500 flex items-center justify-center text-white font-bold mr-3">
+                  <?= strtoupper(substr(htmlspecialchars($rev['nama']), 0, 1)) ?>
                 </div>
                 <div>
-                  <p class="font-semibold text-sm"><?= htmlspecialchars($rev['nama']) ?></p>
-                  <p class="text-xs text-gray-500"><?= date('d M, Y', strtotime($rev['created_at'])) ?></p>
+                  <p class="font-medium"><?= htmlspecialchars($rev['nama']) ?></p>
+                  <p class="text-sm text-gray-500"><?= date('d M Y', strtotime($rev['created_at'])) ?></p>
                 </div>
               </div>
             </div>
           <?php endwhile;
           else: ?>
-            <p class="text-gray-600">Belum ada ulasan untuk mobil ini.</p>
+            <div class="bg-gray-50 rounded-lg p-8 text-center">
+              <i class="fas fa-comment-alt text-gray-400 text-4xl mb-3"></i>
+              <p class="text-gray-600">Belum ada ulasan untuk mobil ini.</p>
+              <a href="tambahReview.php?mobil_id=<?= $id ?>" class="mt-3 inline-block text-blue-600 hover:underline">
+                Jadilah yang pertama mengulas
+              </a>
+            </div>
           <?php endif; ?>
-
-          <!-- Tombol Tulis Review -->
-          <a href="tambahReview.php?mobil_id=<?= $id ?>" class="mt-5 inline-block bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded shadow">
-            ✍️ Tulis Review Anda
-          </a>
         </div>
 
-        <!-- akhiran tab review -->
-
-         <!-- Tab Diskusi -->
-        <div class="tab-content" id="tab-diskusi" style="display: none;">
-          <h3 class="text-xl font-bold mb-4">Diskusi Mobil</h3>
+        <!-- Tab Diskusi -->
+        <div class="tab-content hidden" id="tab-diskusi">
+          <h2 class="text-xl font-bold mb-4">Diskusi <?= htmlspecialchars($data['nama_mobil']) ?></h2>
 
           <!-- Form Komentar Utama -->
-          <form method="POST" action="tambahDiskusi.php" class="mb-5 space-y-3">
-            <?php if (!isset($_SESSION['username'])): ?>
-              <input type="text" name="nama" placeholder="Nama Anda" class="w-full p-2 border rounded" required>
-            <?php else: ?>
-              <input type="hidden" name="nama" value="<?= htmlspecialchars($_SESSION['username']) ?>">
-            <?php endif; ?>
-
-            <textarea name="komentar" placeholder="Tulis komentar atau pertanyaan..." class="w-full p-2 border rounded" required></textarea>
-            <input type="hidden" name="id_mobil" value="<?= htmlspecialchars($id) ?>">
-
-            <!-- Tombol Kirim (Merah) -->
-            <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
-              Kirim
-            </button>
-          </form>
-
-
-        <!-- List Komentar -->
-        <?php
-        $komentarUtama = $conn->query("SELECT * FROM diskusi WHERE id_mobil = $id AND parent_id IS NULL ORDER BY tanggal DESC");
-        while ($komentar = $komentarUtama->fetch_assoc()):
-        ?>
-          <div class="mb-4 p-3 border rounded">
-            <strong><?= htmlspecialchars($komentar['nama']) ?></strong><br>
-            <p class="mb-2"><?= nl2br(htmlspecialchars($komentar['komentar'])) ?></p>
-            <small class="text-gray-500"><?= $komentar['tanggal'] ?></small>
-
-            <!-- Balasan -->
-            <?php
-            $idKomentar = $komentar['id'];
-            $balasan = $conn->query("SELECT * FROM diskusi WHERE parent_id = $idKomentar ORDER BY tanggal ASC");
-            while ($reply = $balasan->fetch_assoc()):
-            ?>
-              <div class="ml-5 mt-3 p-2 border-l-4 border-blue-300 bg-gray-50 rounded">
-                <strong><?= htmlspecialchars($reply['nama']) ?></strong><br>
-                <p><?= nl2br(htmlspecialchars($reply['komentar'])) ?></p>
-                <small class="text-gray-500"><?= $reply['tanggal'] ?></small>
-              </div>
-            <?php endwhile; ?>
-
-            <!-- Form Balas -->
-            <form method="POST" action="tambahDiskusi.php" class="mt-3 space-y-2 ml-5">
+          <div class="bg-gray-50 rounded-lg p-4 mb-6">
+            <h3 class="font-medium mb-3">Tambah Komentar</h3>
+            <form method="POST" action="tambahDiskusi.php" class="space-y-3">
               <?php if (!isset($_SESSION['username'])): ?>
-                <input type="text" name="nama" placeholder="Nama Anda" class="w-full p-2 border rounded" required>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Nama</label>
+                  <input type="text" name="nama" placeholder="Nama Anda" class="w-full p-2 border border-gray-300 rounded-md" required>
+                </div>
               <?php else: ?>
                 <input type="hidden" name="nama" value="<?= htmlspecialchars($_SESSION['username']) ?>">
+                <div class="mb-2 text-sm text-gray-600">
+                  Berkomentar sebagai <strong><?= htmlspecialchars($_SESSION['username']) ?></strong>
+                </div>
               <?php endif; ?>
 
-              <textarea name="komentar" placeholder="Balas komentar ini..." class="w-full p-2 border rounded" required></textarea>
-              <input type="hidden" name="parent_id" value="<?= $komentar['id'] ?>">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Komentar</label>
+                <textarea name="komentar" placeholder="Tulis komentar atau pertanyaan..." class="w-full p-2 border border-gray-300 rounded-md" rows="3" required></textarea>
+              </div>
+              
               <input type="hidden" name="id_mobil" value="<?= htmlspecialchars($id) ?>">
-              <!-- Contoh tombol balas -->
-              <button class="px-3 py-1 bg-black text-white rounded hover:bg-gray-800">
-                Balas
+              
+              <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition">
+                <i class="fas fa-paper-plane mr-2"></i> Kirim Komentar
               </button>
             </form>
           </div>
-        <?php endwhile; ?>
-      </div>
 
-  <!-- Script Slider dan Tab -->
-   <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> -->
-  <script src="https://cdn.tailwindcss.com"></script>
+          <!-- List Komentar -->
+          <h3 class="font-medium mb-3">Komentar Terbaru</h3>
+          
+          <?php
+          $stmt_diskusi = $conn->prepare("SELECT * FROM diskusi WHERE id_mobil = ? AND parent_id IS NULL ORDER BY tanggal DESC");
+          $stmt_diskusi->bind_param("i", $id);
+          $stmt_diskusi->execute();
+          $komentarUtama = $stmt_diskusi->get_result();
+
+          if ($komentarUtama->num_rows > 0):
+            while ($komentar = $komentarUtama->fetch_assoc()):
+          ?>
+            <div class="discussion-card">
+              <div class="flex items-start">
+                <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold mr-3">
+                  <?= strtoupper(substr(htmlspecialchars($komentar['nama']), 0, 1)) ?>
+                </div>
+                <div class="flex-1">
+                  <div class="flex justify-between">
+                    <h4 class="font-medium"><?= htmlspecialchars($komentar['nama']) ?></h4>
+                    <span class="text-sm text-gray-500"><?= date('d M Y, H:i', strtotime($komentar['tanggal'])) ?></span>
+                  </div>
+                  <p class="text-gray-700 mt-1"><?= nl2br(htmlspecialchars($komentar['komentar'])) ?></p>
+                  
+                  <button class="mt-2 text-sm text-blue-600 hover:underline" onclick="toggleReplyForm(<?= $komentar['id'] ?>)">
+                    Balas
+                  </button>
+                  
+                  <!-- Form Balas ( disembunyikan secara default ) -->
+                  <div id="reply-form-<?= $komentar['id'] ?>" class="hidden mt-3 p-3 bg-gray-50 rounded-md">
+                    <form method="POST" action="tambahDiskusi.php" class="space-y-2">
+                      <?php if (!isset($_SESSION['username'])): ?>
+                        <input type="text" name="nama" placeholder="Nama Anda" class="w-full p-2 border border-gray-300 rounded-md" required>
+                      <?php else: ?>
+                        <input type="hidden" name="nama" value="<?= htmlspecialchars($_SESSION['username']) ?>">
+                      <?php endif; ?>
+                      
+                      <textarea name="komentar" placeholder="Balas komentar ini..." class="w-full p-2 border border-gray-300 rounded-md" rows="2" required></textarea>
+                      
+                      <input type="hidden" name="parent_id" value="<?= $komentar['id'] ?>">
+                      <input type="hidden" name="id_mobil" value="<?= htmlspecialchars($id) ?>">
+                      
+                      <div class="flex justify-end">
+                        <button type="button" onclick="toggleReplyForm(<?= $komentar['id'] ?>)" class="px-3 py-1 mr-2 text-gray-600 hover:text-gray-800">
+                          Batal
+                        </button>
+                        <button type="submit" class="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                          Balas
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Balasan -->
+              <?php
+              $idKomentar = $komentar['id'];
+              $stmt_balasan = $conn->prepare("SELECT * FROM diskusi WHERE parent_id = ? ORDER BY tanggal ASC");
+              $stmt_balasan->bind_param("i", $idKomentar);
+              $stmt_balasan->execute();
+              $balasan = $stmt_balasan->get_result();
+
+              if ($balasan->num_rows > 0):
+                while ($reply = $balasan->fetch_assoc()):
+              ?>
+                <div class="reply-card mt-4">
+                  <div class="flex items-start">
+                    <div class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white text-sm font-bold mr-2">
+                      <?= strtoupper(substr(htmlspecialchars($reply['nama']), 0, 1)) ?>
+                    </div>
+                    <div class="flex-1">
+                      <div class="flex justify-between">
+                        <h5 class="font-medium text-sm"><?= htmlspecialchars($reply['nama']) ?></h5>
+                        <span class="text-xs text-gray-500"><?= date('d M Y, H:i', strtotime($reply['tanggal'])) ?></span>
+                      </div>
+                      <p class="text-gray-700 text-sm mt-1"><?= nl2br(htmlspecialchars($reply['komentar'])) ?></p>
+                    </div>
+                  </div>
+                </div>
+              <?php 
+                endwhile;
+              endif;
+              ?>
+            </div>
+          <?php 
+            endwhile;
+          else:
+          ?>
+            <div class="bg-gray-50 rounded-lg p-8 text-center">
+              <i class="fas fa-comments text-gray-400 text-4xl mb-3"></i>
+              <p class="text-gray-600">Belum ada diskusi untuk mobil ini.</p>
+              <p class="text-gray-500 text-sm mt-2">Mulailah diskusi dengan mengajukan pertanyaan atau memberikan komentar.</p>
+            </div>
+          <?php endif; ?>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white mt-12 py-8">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <h3 class="text-lg font-bold mb-4">MobilKu</h3>
+          <p class="text-gray-400">Platform terpercaya untuk informasi dan pembelian mobil terbaru.</p>
+        </div>
+        <div>
+          <h4 class="font-medium mb-3">Menu</h4>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="#" class="hover:text-white">Beranda</a></li>
+            <li><a href="#" class="hover:text-white">Mobil</a></li>
+            <li><a href="#" class="hover:text-white">Promo</a></li>
+            <li><a href="#" class="hover:text-white">Tentang</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-medium mb-3">Layanan</h4>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="#" class="hover:text-white">Test Drive</a></li>
+            <li><a href="#" class="hover:text-white">Kredit</a></li>
+            <li><a href="#" class="hover:text-white">Asuransi</a></li>
+            <li><a href="#" class="hover:text-white">Servis</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-medium mb-3">Kontak</h4>
+          <ul class="space-y-2 text-gray-400">
+            <li><i class="fas fa-phone mr-2"></i> (021) 1234-5678</li>
+            <li><i class="fas fa-envelope mr-2"></i> info@mobila.co.id</li>
+            <li><i class="fas fa-map-marker-alt mr-2"></i> Jakarta, Indonesia</li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400">
+        <p>&copy; 2023 MobilKu. Hak Cipta Dilindungi.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Script -->
   <script>
     const imageList = <?= json_encode($gambarList) ?>;
     let currentIndex = 0;
@@ -280,8 +581,18 @@ while ($row = $q->fetch_assoc()) {
     function updateImage() {
       const mainDisplay = document.getElementById('mainDisplay');
       const imageCounter = document.getElementById('imageCounter');
+      
       mainDisplay.src = imageList[currentIndex];
       imageCounter.textContent = (currentIndex + 1) + ' / ' + imageList.length;
+      
+      // Update thumbnail active state
+      document.querySelectorAll('.thumbnail').forEach((thumb, index) => {
+        if (index === currentIndex) {
+          thumb.classList.add('active');
+        } else {
+          thumb.classList.remove('active');
+        }
+      });
     }
 
     function nextImage() {
@@ -302,49 +613,50 @@ while ($row = $q->fetch_assoc()) {
     // Tab navigation
     document.querySelectorAll('.tab-item').forEach(tab => {
       tab.addEventListener('click', () => {
-        document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
-
-        tab.classList.add('active');
-        const selected = tab.getAttribute('data-tab');
-        document.getElementById('tab-' + selected).style.display = 'block';
+        // Remove active class from all tabs and contents
+        document.querySelectorAll('.tab-item').forEach(t => {
+          t.classList.remove('border-blue-500', 'text-blue-600');
+          t.classList.add('border-transparent', 'text-gray-500');
+        });
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+        
+        // Add active class to selected tab and content
+        tab.classList.remove('border-transparent', 'text-gray-500');
+        tab.classList.add('border-blue-500', 'text-blue-600');
+        
+        const selectedTab = tab.getAttribute('data-tab');
+        document.getElementById('tab-' + selectedTab).classList.remove('hidden');
       });
     });
 
-  const params = new URLSearchParams(window.location.search);
-  const tabParam = params.get("tab");
-  if (tabParam) {
-    document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
-
-    const targetTab = document.querySelector(`.tab-item[data-tab="${tabParam}"]`);
-    const targetContent = document.getElementById('tab-' + tabParam);
-    if (targetTab && targetContent) {
-      targetTab.classList.add('active');
-      targetContent.style.display = 'block';
+    // Toggle reply form
+    function toggleReplyForm(commentId) {
+      const form = document.getElementById('reply-form-' + commentId);
+      form.classList.toggle('hidden');
     }
-  }
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const tab = urlParams.get('tab');
-
-  if (tab === 'diskusi') {
-    document.getElementById('tab-diskusi').style.display = 'block';
-
-    const tabLain = document.querySelectorAll('.tab-content');
-    tabLain.forEach(t => {
-      if (t.id !== 'tab-diskusi') {
-        t.style.display = 'none';
+    // Check for tab parameter in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const tabParam = urlParams.get("tab");
+    if (tabParam) {
+      const targetTab = document.querySelector(`.tab-item[data-tab="${tabParam}"]`);
+      if (targetTab) {
+        targetTab.click();
       }
-    });
-
-    const diskusiTabNav = document.querySelector('[data-tab="diskusi"]');
-    if (diskusiTabNav) {
-      diskusiTabNav.classList.add('active'); // Tambah class jika kamu pakai
     }
-  }
 
+    // Auto-slide for images (optional)
+    let slideInterval = setInterval(nextImage, 5000);
+    
+    // Pause auto-slide when user interacts with slider
+    const mainImageContainer = document.querySelector('.main-image-container');
+    mainImageContainer.addEventListener('mouseenter', () => {
+      clearInterval(slideInterval);
+    });
+    
+    mainImageContainer.addEventListener('mouseleave', () => {
+      slideInterval = setInterval(nextImage, 5000);
+    });
   </script>
 </body>
-
 </html>
