@@ -1,4 +1,5 @@
-<!-- fix -->
+<!-- fix --> 
+ <!-- fix?\ -->
 <?php
 include './config/db.php';
 
