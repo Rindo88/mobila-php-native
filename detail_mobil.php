@@ -170,27 +170,24 @@ if (empty($gambarList)) {
 </head>
 <body class="bg-gray-50">
   <!-- Header -->
-  <header class="bg-white shadow-sm">
-    <div class="container mx-auto px-4 py-4">
-      <div class="flex items-center justify-between">
-        <a href="index.php" class="text-xl font-bold text-blue-600">MobilKu</a>
-        <nav>
-          <ul class="flex space-x-6">
-            <li><a href="index.php" class="text-gray-700 hover:text-blue-600">Beranda</a></li>
-            <li><a href="#" class="text-gray-700 hover:text-blue-600">Mobil</a></li>
-            <li><a href="#" class="text-gray-700 hover:text-blue-600">Promo</a></li>
-            <li><a href="#" class="text-gray-700 hover:text-blue-600">Tentang</a></li>
-            <?php if (isset($_SESSION['email'])): ?>
-              <li><a href="profile.php" class="text-gray-700 hover:text-blue-600">Profil</a></li>
-              <li><a href="logout.php" class="text-gray-700 hover:text-blue-600">Logout</a></li>
-            <?php else: ?>
-              <li><a href="login.php" class="text-gray-700 hover:text-blue-600">Login</a></li>
-            <?php endif; ?>
-          </ul>
-        </nav>
-      </div>
+<header class="bg-white shadow-sm">
+  <div class="container mx-auto px-4 py-4">
+    <div class="flex items-center justify-between">
+      <a href="pengguna.php" class="text-xl font-bold text-blue-600">Mobila</a> <!-- Ubah dari index.php ke pengguna.php -->
+      <nav>
+        <ul class="flex space-x-6">
+          <li><a href="pengguna.php" class="text-gray-700 hover:text-blue-600">Beranda</a></li>
+          <li><a href="pengguna.php#shop" class="text-gray-700 hover:text-blue-600">Mobil</a></li> <!-- Tambah anchor -->
+          <?php if (isset($_SESSION['email'])): ?>
+            <li><a href="logout.php" class="text-gray-700 hover:text-blue-600">Logout</a></li>
+          <?php else: ?>
+            <li><a href="login.php" class="text-gray-700 hover:text-blue-600">Login</a></li>
+          <?php endif; ?>
+        </ul>
+      </nav>
     </div>
-  </header>
+  </div>
+</header>
 
   <!-- Main Content -->
   <main class="container mx-auto px-4 py-8">
