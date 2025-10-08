@@ -259,9 +259,6 @@ if (empty($gambarList)) {
                 <i class="fas fa-sign-in-alt mr-2"></i> Login untuk Booking
               </a>
             <?php endif; ?>
-            <a href="#" class="px-6 py-3 bg-white text-gray-800 font-medium rounded-lg border border-gray-300 hover:bg-gray-50 transition text-center">
-              <i class="fas fa-heart mr-2"></i> Simpan
-            </a>
           </div>
         </div>
       </div>

@@ -1,0 +1,637 @@
+<div class="flex gap-4 mt-8">
+            <a href="#" class="btn btn-circle btn-ghost btn-lg">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+            </a>
+            <a href="#" class="btn btn-circle btn-ghost btn-lg">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            </a>
+            <a href="#" class="btn btn-circle btn-ghost btn-lg">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+          </div><!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio - Web Developer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    * {
+      font-family: 'Inter', sans-serif;
+    }
+    
+    html {
+      overflow-y: auto;
+    }
+    
+    body {
+      overflow-x: hidden;
+    }
+    
+    #hero-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .tilt-card {
+      transition: transform 0.3s ease;
+    }
+    
+    .tilt-card:hover {
+      transform: perspective(1000px) rotateX(2deg) rotateY(-5deg) scale(1.02);
+    }
+    
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .skill-card {
+      transition: all 0.3s ease;
+    }
+    
+    .skill-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+    }
+  </style>
+</head>
+<body class="bg-base-100">
+  
+  <!-- Navbar -->
+  <div class="navbar bg-base-300 fixed top-0 z-50 shadow-lg">
+    <div class="navbar-start">
+      <div class="dropdown">
+        <label tabindex="0" class="btn btn-ghost lg:hidden">
+          <i class="fas fa-bars text-xl"></i>
+        </label>
+        <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-300 rounded-box w-52">
+          <li><a href="#home"><i class="fas fa-home mr-2"></i>Home</a></li>
+          <li><a href="#about"><i class="fas fa-user mr-2"></i>About</a></li>
+          <li><a href="#projects"><i class="fas fa-code mr-2"></i>Projects</a></li>
+          <li><a href="#contact"><i class="fas fa-envelope mr-2"></i>Contact</a></li>
+        </ul>
+      </div>
+      <a class="btn btn-ghost normal-case text-xl font-bold">
+        <span class="text-primary">&lt;</span>Portfolio<span class="text-primary">/&gt;</span>
+      </a>
+    </div>
+    <div class="navbar-center hidden lg:flex">
+      <ul class="menu menu-horizontal px-1">
+        <li><a href="#home" class="nav-link"><i class="fas fa-home mr-2"></i>Home</a></li>
+        <li><a href="#about" class="nav-link"><i class="fas fa-user mr-2"></i>About</a></li>
+        <li><a href="#projects" class="nav-link"><i class="fas fa-code mr-2"></i>Projects</a></li>
+        <li><a href="#contact" class="nav-link"><i class="fas fa-envelope mr-2"></i>Contact</a></li>
+      </ul>
+    </div>
+    <div class="navbar-end">
+      <button class="btn btn-primary btn-sm">Hire Me</button>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <canvas id="hero-canvas"></canvas>
+    <div class="hero-content text-center z-10">
+      <div class="max-w-3xl px-4">
+        <h1 class="text-5xl md:text-7xl font-bold mb-4 fade-in">
+          Hi, I'm <span class="text-primary">Your Name</span>
+        </h1>
+        <p class="text-xl md:text-2xl mb-8 text-gray-400 fade-in" style="transition-delay: 0.2s">
+          Web Developer / Creative Designer
+        </p>
+        <p class="text-lg mb-8 text-gray-500 fade-in" style="transition-delay: 0.4s">
+          I create beautiful, functional, and user-centered digital experiences
+        </p>
+        <div class="flex gap-4 justify-center fade-in" style="transition-delay: 0.6s">
+          <a href="#contact" class="btn btn-primary btn-lg">
+            <i class="fas fa-paper-plane mr-2"></i>Contact Me
+          </a>
+          <a href="#" class="btn btn-outline btn-lg">
+            <i class="fas fa-download mr-2"></i>Download CV
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="py-20 px-4 bg-base-200">
+    <div class="container mx-auto max-w-6xl">
+      <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 fade-in">
+        About <span class="text-primary">Me</span>
+      </h2>
+      
+      <div class="grid md:grid-cols-2 gap-12 items-center mb-16">
+        <div class="fade-in">
+          <div class="avatar">
+            <div class="w-full max-w-md rounded-2xl shadow-2xl mx-auto">
+              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Developer" alt="Profile" />
+            </div>
+          </div>
+        </div>
+        
+        <div class="fade-in" style="transition-delay: 0.2s">
+          <h3 class="text-3xl font-bold mb-4">Creative Developer & Designer</h3>
+          <p class="text-lg text-gray-400 mb-6">
+            Passionate about creating innovative web solutions with modern technologies. 
+            I specialize in building responsive, user-friendly applications that combine 
+            beautiful design with powerful functionality.
+          </p>
+          <p class="text-lg text-gray-400 mb-6">
+            With expertise in front-end and back-end development, I bring ideas to life 
+            through clean code and creative problem-solving.
+          </p>
+          <div class="flex gap-4">
+            <div class="stat bg-base-300 rounded-lg">
+              <div class="stat-figure text-primary">
+                <i class="fas fa-briefcase text-3xl"></i>
+              </div>
+              <div class="stat-value text-primary">5+</div>
+              <div class="stat-title">Years Experience</div>
+            </div>
+            <div class="stat bg-base-300 rounded-lg">
+              <div class="stat-figure text-secondary">
+                <i class="fas fa-project-diagram text-3xl"></i>
+              </div>
+              <div class="stat-value text-secondary">50+</div>
+              <div class="stat-title">Projects Done</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fade-in" style="transition-delay: 0.4s">
+        <h3 class="text-3xl font-bold text-center mb-8">My Skills</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div class="card bg-base-300 shadow-xl skill-card">
+            <div class="card-body items-center text-center">
+              <i class="fab fa-html5 text-4xl text-primary mb-2"></i>
+              <h4 class="card-title text-primary">HTML5</h4>
+              <p class="text-sm text-gray-400">Semantic markup</p>
+            </div>
+          </div>
+          <div class="card bg-base-300 shadow-xl skill-card">
+            <div class="card-body items-center text-center">
+              <i class="fab fa-css3-alt text-4xl text-secondary mb-2"></i>
+              <h4 class="card-title text-secondary">CSS3</h4>
+              <p class="text-sm text-gray-400">Modern styling</p>
+            </div>
+          </div>
+          <div class="card bg-base-300 shadow-xl skill-card">
+            <div class="card-body items-center text-center">
+              <i class="fab fa-js text-4xl text-accent mb-2"></i>
+              <h4 class="card-title text-accent">JavaScript</h4>
+              <p class="text-sm text-gray-400">ES6+ features</p>
+            </div>
+          </div>
+          <div class="card bg-base-300 shadow-xl skill-card">
+            <div class="card-body items-center text-center">
+              <i class="fab fa-react text-4xl text-info mb-2"></i>
+              <h4 class="card-title text-info">React</h4>
+              <p class="text-sm text-gray-400">Component-based</p>
+            </div>
+          </div>
+          <div class="card bg-base-300 shadow-xl skill-card">
+            <div class="card-body items-center text-center">
+              <i class="fab fa-node-js text-4xl text-success mb-2"></i>
+              <h4 class="card-title text-success">Node.js</h4>
+              <p class="text-sm text-gray-400">Backend dev</p>
+            </div>
+          </div>
+          <div class="card bg-base-300 shadow-xl skill-card">
+            <div class="card-body items-center text-center">
+              <i class="fab fa-php text-4xl text-warning mb-2"></i>
+              <h4 class="card-title text-warning">PHP</h4>
+              <p class="text-sm text-gray-400">Server-side</p>
+            </div>
+          </div>
+          <div class="card bg-base-300 shadow-xl skill-card">
+            <div class="card-body items-center text-center">
+              <i class="fas fa-database text-4xl text-error mb-2"></i>
+              <h4 class="card-title text-error">MySQL</h4>
+              <p class="text-sm text-gray-400">Database</p>
+            </div>
+          </div>
+          <div class="card bg-base-300 shadow-xl skill-card">
+            <div class="card-body items-center text-center">
+              <i class="fas fa-wind text-4xl text-primary mb-2"></i>
+              <h4 class="card-title text-primary">Tailwind</h4>
+              <p class="text-sm text-gray-400">Utility-first CSS</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects" class="py-20 px-4">
+    <div class="container mx-auto max-w-6xl">
+      <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 fade-in">
+        My <span class="text-primary">Projects</span>
+      </h2>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="card bg-base-300 shadow-xl tilt-card fade-in">
+          <figure class="h-48 bg-gradient-to-br from-primary to-secondary"></figure>
+          <div class="card-body">
+            <h3 class="card-title">E-Commerce Platform</h3>
+            <p class="text-gray-400">Full-stack online store with payment integration and admin dashboard</p>
+            <div class="flex flex-wrap gap-2 my-2">
+              <span class="badge badge-primary">React</span>
+              <span class="badge badge-secondary">Node.js</span>
+              <span class="badge badge-accent">MongoDB</span>
+            </div>
+            <div class="card-actions justify-end">
+              <button class="btn btn-primary btn-sm">
+                <i class="fas fa-eye mr-1"></i>View Demo
+              </button>
+              <button class="btn btn-ghost btn-sm">
+                <i class="fab fa-github mr-1"></i>GitHub
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card bg-base-300 shadow-xl tilt-card fade-in" style="transition-delay: 0.1s">
+          <figure class="h-48 bg-gradient-to-br from-secondary to-accent"></figure>
+          <div class="card-body">
+            <h3 class="card-title">Portfolio Website</h3>
+            <p class="text-gray-400">Modern portfolio with 3D animations and smooth interactions</p>
+            <div class="flex flex-wrap gap-2 my-2">
+              <span class="badge badge-info">Three.js</span>
+              <span class="badge badge-success">Tailwind</span>
+              <span class="badge badge-warning">GSAP</span>
+            </div>
+            <div class="card-actions justify-end">
+              <button class="btn btn-primary btn-sm">View Demo</button>
+              <button class="btn btn-ghost btn-sm">GitHub</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card bg-base-300 shadow-xl tilt-card fade-in" style="transition-delay: 0.2s">
+          <figure class="h-48 bg-gradient-to-br from-accent to-info"></figure>
+          <div class="card-body">
+            <h3 class="card-title">Task Management App</h3>
+            <p class="text-gray-400">Collaborative task manager with real-time updates and notifications</p>
+            <div class="flex flex-wrap gap-2 my-2">
+              <span class="badge badge-error">Vue.js</span>
+              <span class="badge badge-primary">Firebase</span>
+              <span class="badge badge-secondary">Vuetify</span>
+            </div>
+            <div class="card-actions justify-end">
+              <button class="btn btn-primary btn-sm">View Demo</button>
+              <button class="btn btn-ghost btn-sm">GitHub</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card bg-base-300 shadow-xl tilt-card fade-in" style="transition-delay: 0.3s">
+          <figure class="h-48 bg-gradient-to-br from-info to-success"></figure>
+          <div class="card-body">
+            <h3 class="card-title">Weather Dashboard</h3>
+            <p class="text-gray-400">Real-time weather app with beautiful UI and location tracking</p>
+            <div class="flex flex-wrap gap-2 my-2">
+              <span class="badge badge-warning">JavaScript</span>
+              <span class="badge badge-error">API Integration</span>
+              <span class="badge badge-info">Chart.js</span>
+            </div>
+            <div class="card-actions justify-end">
+              <button class="btn btn-primary btn-sm">View Demo</button>
+              <button class="btn btn-ghost btn-sm">GitHub</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card bg-base-300 shadow-xl tilt-card fade-in" style="transition-delay: 0.4s">
+          <figure class="h-48 bg-gradient-to-br from-success to-warning"></figure>
+          <div class="card-body">
+            <h3 class="card-title">Blog Platform</h3>
+            <p class="text-gray-400">CMS-powered blog with markdown support and SEO optimization</p>
+            <div class="flex flex-wrap gap-2 my-2">
+              <span class="badge badge-primary">Next.js</span>
+              <span class="badge badge-secondary">Strapi</span>
+              <span class="badge badge-accent">PostgreSQL</span>
+            </div>
+            <div class="card-actions justify-end">
+              <button class="btn btn-primary btn-sm">View Demo</button>
+              <button class="btn btn-ghost btn-sm">GitHub</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card bg-base-300 shadow-xl tilt-card fade-in" style="transition-delay: 0.5s">
+          <figure class="h-48 bg-gradient-to-br from-warning to-error"></figure>
+          <div class="card-body">
+            <h3 class="card-title">Social Media App</h3>
+            <p class="text-gray-400">Instagram-like platform with posts, stories, and messaging</p>
+            <div class="flex flex-wrap gap-2 my-2">
+              <span class="badge badge-info">React Native</span>
+              <span class="badge badge-success">Express</span>
+              <span class="badge badge-warning">Socket.io</span>
+            </div>
+            <div class="card-actions justify-end">
+              <button class="btn btn-primary btn-sm">View Demo</button>
+              <button class="btn btn-ghost btn-sm">GitHub</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="py-20 px-4 bg-base-200">
+    <div class="container mx-auto max-w-4xl">
+      <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 fade-in">
+        Get In <span class="text-primary">Touch</span>
+      </h2>
+      
+      <div class="grid md:grid-cols-2 gap-12">
+        <div class="fade-in">
+          <h3 class="text-2xl font-bold mb-6">Let's work together!</h3>
+          <p class="text-gray-400 mb-8">
+            I'm always interested in hearing about new projects and opportunities. 
+            Whether you have a question or just want to say hi, feel free to reach out!
+          </p>
+          
+          <div class="space-y-4">
+            <div class="flex items-center gap-4">
+              <div class="btn btn-circle btn-primary">
+                <i class="fas fa-envelope text-xl"></i>
+              </div>
+              <div>
+                <p class="font-semibold">Email</p>
+                <p class="text-gray-400">your.email@example.com</p>
+              </div>
+            </div>
+            
+            <div class="flex items-center gap-4">
+              <div class="btn btn-circle btn-secondary">
+                <i class="fas fa-phone text-xl"></i>
+              </div>
+              <div>
+                <p class="font-semibold">Phone</p>
+                <p class="text-gray-400">+62 812-3456-7890</p>
+              </div>
+            </div>
+            
+            <div class="flex items-center gap-4">
+              <div class="btn btn-circle btn-accent">
+                <i class="fas fa-map-marker-alt text-xl"></i>
+              </div>
+              <div>
+                <p class="font-semibold">Location</p>
+                <p class="text-gray-400">Jakarta, Indonesia</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex gap-4 mt-8">
+            <a href="#" class="btn btn-circle btn-ghost btn-lg">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+            </a>
+            <a href="#" class="btn btn-circle btn-ghost btn-lg">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            </a>
+            <a href="#" class="btn btn-circle btn-ghost btn-lg">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+          </div>
+        </div>
+        
+        <div class="card bg-base-300 shadow-xl fade-in" style="transition-delay: 0.2s">
+          <div class="card-body">
+            <form class="space-y-4">
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Your Name</span>
+                </label>
+                <input type="text" placeholder="John Doe" class="input input-bordered" required />
+              </div>
+              
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Your Email</span>
+                </label>
+                <input type="email" placeholder="john@example.com" class="input input-bordered" required />
+              </div>
+              
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Message</span>
+                </label>
+                <textarea class="textarea textarea-bordered h-32" placeholder="Your message here..." required></textarea>
+              </div>
+              
+              <button type="submit" class="btn btn-primary w-full">
+                <i class="fas fa-paper-plane mr-2"></i>Send Message
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer footer-center p-10 bg-base-300 text-base-content">
+    <div>
+      <p class="font-bold text-lg">
+        <span class="text-primary">&lt;</span>Your Name<span class="text-primary">/&gt;</span>
+      </p>
+      <p class="text-gray-400">Creating digital experiences with passion</p>
+      <p class="text-sm text-gray-500">© 2025 Your Name. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Three.js Scene Setup
+    const canvas = document.getElementById('hero-canvas');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    camera.position.z = 5;
+
+    // Create rotating sphere with wireframe
+    const geometry = new THREE.IcosahedronGeometry(2, 1);
+    const material = new THREE.MeshPhongMaterial({
+      color: 0x6366f1,
+      wireframe: true,
+      emissive: 0x6366f1,
+      emissiveIntensity: 0.2
+    });
+    const sphere = new THREE.Mesh(geometry, material);
+    scene.add(sphere);
+
+    // Add particles
+    const particlesGeometry = new THREE.BufferGeometry();
+    const particlesCount = 1000;
+    const posArray = new Float32Array(particlesCount * 3);
+    
+    for(let i = 0; i < particlesCount * 3; i++) {
+      posArray[i] = (Math.random() - 0.5) * 10;
+    }
+    
+    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+    const particlesMaterial = new THREE.PointsMaterial({
+      size: 0.02,
+      color: 0x8b5cf6,
+      transparent: true,
+      opacity: 0.6
+    });
+    
+    const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particlesMesh);
+
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
+    
+    const pointLight = new THREE.PointLight(0x6366f1, 2);
+    pointLight.position.set(5, 5, 5);
+    scene.add(pointLight);
+
+    // Animation
+    let mouseX = 0;
+    let mouseY = 0;
+    
+    document.addEventListener('mousemove', (e) => {
+      mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+      mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+    });
+
+    function animate() {
+      requestAnimationFrame(animate);
+      
+      sphere.rotation.x += 0.003;
+      sphere.rotation.y += 0.005;
+      
+      particlesMesh.rotation.y += 0.001;
+      
+      // Mouse interaction
+      sphere.rotation.x += mouseY * 0.01;
+      sphere.rotation.y += mouseX * 0.01;
+      
+      renderer.render(scene, camera);
+    }
+    
+    animate();
+
+    // Responsive resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // Lenis Smooth Scroll
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smooth: true,
+      smoothTouch: false,
+      wheelMultiplier: 1,
+      touchMultiplier: 2
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    // Smooth scroll for nav links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          lenis.scrollTo(target, { offset: -80, duration: 1.5 });
+        }
+      });
+    });
+
+    // Fade-in animation on scroll
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.fade-in').forEach(el => {
+      observer.observe(el);
+    });
+
+    // Initial fade-in for hero content
+    setTimeout(() => {
+      document.querySelectorAll('.hero-content .fade-in').forEach(el => {
+        el.classList.add('visible');
+      });
+    }, 300);
+
+    // Form submission
+    document.querySelector('form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Thank you for your message! I will get back to you soon.');
+      e.target.reset();
+    });
+
+    // Active nav link on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (scrollY >= (sectionTop - 200)) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
