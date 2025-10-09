@@ -121,7 +121,7 @@ $faqs = [
       </h1>
       <div class="flex justify-center gap-4">
         <a href="login.php" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-8 rounded shadow-lg transition">Booking</a>
-        <a href="#shop" class="border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white font-semibold py-3 px-8 rounded transition">Lihat Katalog</a>
+        <a href="#shop" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-8 rounded shadow-lg transition">Lihat Katalog</a>
       </div>
     </div>
   </section>

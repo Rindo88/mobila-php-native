@@ -119,12 +119,6 @@ $active_users = $conn->query("SELECT COUNT(*) as count FROM users WHERE created_
             <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
           </div>
           <div class="relative group">
-            <button class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 hover:bg-blue-200 transition-colors">
-              <i class="fas fa-bell"></i>
-            </button>
-            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
-          </div>
-          <div class="relative group">
             <button class="flex items-center space-x-2 focus:outline-none">
               <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
                 <?= strtoupper(substr(htmlspecialchars($_SESSION['admin_username']), 0, 1)) ?>
